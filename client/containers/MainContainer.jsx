@@ -8,32 +8,38 @@ import 'react-pro-sidebar/dist/css/styles.css';
 import CreatePost from '../components/CreatePost.jsx';
 import Feed from '../components/Feed.jsx';
 import FeedCodeBlock from '../components/FeedCodeBlock.jsx';
+import Post from '../components/Post.jsx';
 
 import classes from './MainContainer.module.css';
 import './custom.scss';
 
 export default function MainContainer() {
+  //const [topic, setTopic] = useState('Java');
 
-  const [topic, setTopic] = useState('Java');
+  const languages = {
+    '': 'Feed',
+    Javascript: 'JavaScript',
+    Python: 'Python',
+    'C-sharp': 'C#',
+    'C-plus-plus': 'C++',
+    Java: 'Java',
+    PHP: 'PHP',
+  };
+
+  const menuItems = Object.entries(languages).map(([url, navLabel]) => (
+    <MenuItem key={navLabel}>
+      <Link to={`/home/feed/${url}`}>{navLabel}</Link>
+    </MenuItem>
+  ));
 
   return (
     <Container className={classes.mainContainer}>
-      <ProSidebar className={classes.sidebar}>
-        <Menu iconShape="square">
-          <MenuItem>
-            <Link to="/home">Home</Link>
-          </MenuItem>
-          <MenuItem>
-            <Link to="/home/feed">Feed</Link>
-          </MenuItem>
-          <MenuItem><Link to="/home/JavaScript">JavaScript</Link></MenuItem>
-          <MenuItem><Link to="/home/Python">Python</Link></MenuItem>
-          <MenuItem><Link to="/home/C#">C#</Link></MenuItem>
-          <MenuItem><Link to="/home/C++">C++</Link></MenuItem>
-          <MenuItem><Link to="/home/Java">Java</Link></MenuItem>
-          <MenuItem><Link to="/home/PHP">PHP</Link></MenuItem>
-        </Menu>
-      </ProSidebar>
+      <div className="sidebar">
+        <ProSidebar>
+          <Menu iconShape="square">{menuItems}</Menu>
+        </ProSidebar>
+      </div>
+
       {/* we may need to import other components below */}
       <Switch>
         <Route path="/home" exact>
@@ -42,19 +48,14 @@ export default function MainContainer() {
         <Route path="/home/createpost">
           <CreatePost />
         </Route>
-        <Route path="/home/feed">
-          <Feed topic={topic} />
-          {/* <FeedCodeBlock /> */}
+        <Route path="/home/feed/:lang?">
+          <Feed />
+        </Route>
+        <Route path="/home/post/:postID?">
+          <Post />
         </Route>
       </Switch>
-      {/* <main className={classes.codeBlockContainer}>
-        <FeedCodeBlock />
-        <FeedCodeBlock />
-        <FeedCodeBlock />
-        <FeedCodeBlock />
-        <FeedCodeBlock />
-        <FeedCodeBlock />
-      </main> */}
+
       <div>
         <Link to="/home/createpost">
           <svg
@@ -73,5 +74,3 @@ export default function MainContainer() {
     </Container>
   );
 }
-
-//@import '~react-pro-sidebar/dist/scss/styles.scss'; for styles.scss
